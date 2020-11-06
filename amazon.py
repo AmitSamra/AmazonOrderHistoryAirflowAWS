@@ -4,6 +4,7 @@ from airflow.operators.bash_operator import BashOperator
 from airflow.operators.python_operator import PythonOperator
 from datetime import timedelta, datetime
 import os
+import requests
 import csv
 import sqlalchemy
 from sqlalchemy import create_engine
@@ -11,7 +12,6 @@ from sqlalchemy.sql import text
 import numpy as np 
 import pandas as pd
 from dotenv import load_dotenv
-#from airflow.operators.papermill_operator import PapermillOperator
 import papermill as pm
 
 
@@ -34,6 +34,24 @@ dag = DAG(
 	#schedule_interval = timedelta(hours=1),
 	catchup = False,
 	max_active_runs = 1,
+	)
+
+
+def get_amazon_purchases():
+	"""
+	Gets Amazon order history csv stored on AWS S3.
+	"""
+	url = "https://amazon-order-history.s3.amazonaws.com/amazon_purchases.csv"
+	response = requests.get(url)
+	path = os.path.join(os.path.dirname(__file__),"../amazon_purchases.csv")
+	with open(path, 'w') as f:
+		f.write(response.content)
+
+t1 = PythonOperator(
+	task_id = 'get_amazon_purchases',
+	python_callable = get_amazon_purchases,
+	provide_context = False,
+	dag = dag
 	)
 
 
@@ -126,10 +144,10 @@ def etl_csv():
 	engine = create_engine('mysql+pymysql://' + os.environ.get("MYSQL_USER") + ":" + os.environ.get("MYSQL_PASSWORD") + '@localhost:3306/amazon')
 
 	# Export df to sql using df.to_sql
-	df.to_sql('purchases_airflow', con=engine, if_exists = 'replace', index=False)
+	df.to_sql('purchases_airflow_aws', con=engine, if_exists = 'replace', index=False)
 	
 
-t1 = PythonOperator(
+t2 = PythonOperator(
 	task_id = 'etl_amazon_purchases.csv',
 	python_callable = etl_csv,
 	provide_context = False,
@@ -137,14 +155,14 @@ t1 = PythonOperator(
 	)
 
 
-notebook_in_path = '/Users/amit/Coding/Projects/AmazonOrderHistoryAirflow/AmazonOrderHistoryAirflow_input.ipynb'
-notebook_out_path = '/Users/amit/Coding/Projects/AmazonOrderHistoryAirflow/AmazonOrderHistoryAirflow_output.ipynb'
+notebook_in_path = '/Users/amit/Coding/Projects/AmazonOrderHistoryAirflowAWS/AmazonOrderHistoryAirflow_input.ipynb'
+notebook_out_path = '/Users/amit/Coding/Projects/AmazonOrderHistoryAirflowAWS/AmazonOrderHistoryAirflow_output.ipynb'
 
 def run_notebook():
 	pm.execute_notebook(notebook_in_path,notebook_out_path)
 
 
-t2 = PythonOperator(
+t3 = PythonOperator(
 	task_id = 'run_notebook',
 	python_callable = run_notebook,
 	provide_context = False,
@@ -152,4 +170,4 @@ t2 = PythonOperator(
 	)
 
 
-t1 >> t2
+t1 >> t2 >> t3

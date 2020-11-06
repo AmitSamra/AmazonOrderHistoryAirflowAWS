@@ -156,8 +156,8 @@ t2 = PythonOperator(
 	)
 
 
-notebook_in_path = '/Users/amit/Coding/Projects/AmazonOrderHistoryAirflowAWS/AmazonOrderHistoryAirflow_input.ipynb'
-notebook_out_path = '/Users/amit/Coding/Projects/AmazonOrderHistoryAirflowAWS/AmazonOrderHistoryAirflow_output.ipynb'
+notebook_in_path = '/Users/amit/Coding/Projects/AmazonOrderHistoryAirflowAWS/AmazonOrderHistoryAirflowAWS_input.ipynb'
+notebook_out_path = '/Users/amit/Coding/Projects/AmazonOrderHistoryAirflowAWS/AmazonOrderHistoryAirflowAWS_output.ipynb'
 
 def run_notebook():
 	pm.execute_notebook(notebook_in_path,notebook_out_path)

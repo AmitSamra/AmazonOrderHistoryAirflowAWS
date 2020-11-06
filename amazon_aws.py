@@ -43,8 +43,9 @@ def get_amazon_purchases():
 	"""
 	url = "https://amazon-order-history.s3.amazonaws.com/amazon_purchases.csv"
 	response = requests.get(url)
-	path = os.path.join(os.path.dirname(__file__),"../amazon_purchases.csv")
-	with open(path, 'w') as f:
+	#path = os.path.join(os.path.dirname(__file__),"../amazon_purchases.csv")
+	path = '/Users/amit/Coding/Projects/AmazonOrderHistoryAirflowAWS/amazon_purchases.csv'
+	with open(path, 'wb') as f:
 		f.write(response.content)
 
 t1 = PythonOperator(

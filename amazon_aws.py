@@ -13,6 +13,8 @@ import numpy as np
 import pandas as pd
 from dotenv import load_dotenv
 import papermill as pm
+import airflow.hooks.S3_hook
+import airflow.hooks.postgres_hook
 
 
 dotenv_local_path = os.path.join(os.path.dirname(__file__), '.env')
@@ -37,6 +39,8 @@ dag = DAG(
 	)
 
 
+csv_input_path = '/Users/amit/Coding/Projects/AmazonOrderHistoryAirflowAWS/amazon_purchases.csv'
+
 def get_amazon_purchases():
 	"""
 	Gets Amazon order history csv stored on AWS S3.
@@ -44,7 +48,7 @@ def get_amazon_purchases():
 	url = "https://amazon-order-history.s3.amazonaws.com/amazon_purchases.csv"
 	response = requests.get(url)
 	#path = os.path.join(os.path.dirname(__file__),"../amazon_purchases.csv")
-	path = '/Users/amit/Coding/Projects/AmazonOrderHistoryAirflowAWS/amazon_purchases.csv'
+	path = csv_input_path
 	with open(path, 'wb') as f:
 		f.write(response.content)
 
@@ -142,11 +146,13 @@ def etl_csv():
 	df
 
 	# Connect to sql using sqlalchemy
-	engine = create_engine('mysql+pymysql://' + os.environ.get("MYSQL_USER") + ":" + os.environ.get("MYSQL_PASSWORD") + '@localhost:3306/amazon')
+	#engine = create_engine('mysql+pymysql://' + os.environ.get("MYSQL_USER") + ":" + os.environ.get("MYSQL_PASSWORD") + '@localhost:3306/amazon')
 
 	# Export df to sql using df.to_sql
-	df.to_sql('purchases_airflow_aws', con=engine, if_exists = 'replace', index=False)
+	#df.to_sql('purchases_airflow_aws', con=engine, if_exists = 'replace', index=False)
 	
+
+
 
 t2 = PythonOperator(
 	task_id = 'etl_amazon_purchases.csv',

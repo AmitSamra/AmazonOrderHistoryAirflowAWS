@@ -171,6 +171,7 @@ t2 = PythonOperator(
 
 # ----------------------------------------------------------------------------------------------------
 # Connect to Postgres on AWS RDS and import output csv from previous task
+# Unlike MySQL, Postgres will import column names in lowercase unless wrapped in quotes. 
 
 t3 = PostgresOperator(
 	task_id = 'create_table_postgres',

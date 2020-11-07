@@ -15,11 +15,13 @@ from dotenv import load_dotenv
 import papermill as pm
 import airflow.hooks.S3_hook
 import airflow.hooks.postgres_hook
-
+import botocore
 
 dotenv_local_path = os.path.join(os.path.dirname(__file__), '.env')
 load_dotenv(dotenv_path=dotenv_local_path, verbose=True)
 
+# ----------------------------------------------------------------------------------------------------
+# Setup DAG
 
 default_args = {
 	'owner':'amit',
@@ -38,6 +40,8 @@ dag = DAG(
 	max_active_runs = 1,
 	)
 
+# ----------------------------------------------------------------------------------------------------
+# Get input csv stored on AWS S3
 
 csv_input_path = '/Users/amit/Coding/Projects/AmazonOrderHistoryAirflowAWS/amazon_purchases.csv'
 
@@ -59,6 +63,10 @@ t1 = PythonOperator(
 	dag = dag
 	)
 
+# ----------------------------------------------------------------------------------------------------
+# Read input csv into pandas, peform ETL, export final dataframe as output csv
+
+csv_output_path = '/Users/amit/Coding/Projects/AmazonOrderHistoryAirflowAWS/amazon_purchases_2.csv'
 
 def etl_csv():
 
@@ -151,8 +159,8 @@ def etl_csv():
 	# Export df to sql using df.to_sql
 	#df.to_sql('purchases_airflow_aws', con=engine, if_exists = 'replace', index=False)
 	
-
-
+	# Export final dataframe to csv
+	df.to_csv(csv_output_path, index = False)
 
 t2 = PythonOperator(
 	task_id = 'etl_amazon_purchases.csv',
@@ -161,6 +169,47 @@ t2 = PythonOperator(
 	dag = dag
 	)
 
+# ----------------------------------------------------------------------------------------------------
+# Connect to Postgres on AWS RDS and import output csv from previous task
+
+t3 = PostgresOperator(
+	task_id = 'create_table',
+	postgres_conn_id = 'amazon_order_history_aws',
+	sql = ''' DROP TABLE IF EXISTS purchases_aws; 
+	CREATE TABLE purchases (
+	OrderID int not null primary key,
+	OrderDate date,
+	Category varchar(50),
+	`Condition` varchar(50),
+	Seller varchar(50),
+	ListPricePerUnit numeric(10,2),
+	PurchasePricePerUnit numeric(10,2),
+	Quantity int,
+	ShipDate date,
+	Carrier varchar(50),
+	ItemSubtotal numeric(10,2),
+	Tax numeric(10,2),
+	ItemTotal numeric(10,2),
+	OrderYear int,
+	OrderMonth int,
+	OrderDay int,
+	OrderDayIndex int,
+	OrderDayName varchar(50)
+		)''',
+	dag = dag
+	)
+
+hook_copy_table = airflow.hooks.postgres_hook.PostgresHook('amazon_order_history_aws')
+
+def import_csv():
+	"""
+	Imports CSV into Postgres RDS
+	"""
+	sql = "DELETE FROM amazon.purchases; COPY amazon.purchases FROM STDIN WITH CSV DELIMITER ',', HEADER;"
+	hook_copy_table.copy_expert(sql, csv_output_path, open = open)
+
+# ----------------------------------------------------------------------------------------------------
+# Run Jupyter Notebook locally
 
 notebook_in_path = '/Users/amit/Coding/Projects/AmazonOrderHistoryAirflowAWS/AmazonOrderHistoryAirflowAWS_input.ipynb'
 notebook_out_path = '/Users/amit/Coding/Projects/AmazonOrderHistoryAirflowAWS/AmazonOrderHistoryAirflowAWS_output.ipynb'
@@ -169,7 +218,7 @@ def run_notebook():
 	pm.execute_notebook(notebook_in_path,notebook_out_path)
 
 
-t3 = PythonOperator(
+t4 = PythonOperator(
 	task_id = 'run_notebook',
 	python_callable = run_notebook,
 	provide_context = False,
@@ -177,4 +226,4 @@ t3 = PythonOperator(
 	)
 
 
-t1 >> t2 >> t3
+t1 >> t2 >> t3 >> t4

@@ -1,6 +1,6 @@
 ![amazon_logo](img/amazon_logo.png)
 
-One of the best things about Amazon is the ability to download personal order reports in CSV format. In this project, I provide insight into my Amazon order history spanning 2008 to 2019, inclusive. I use python, pandas, matplotlib and SQLAlchemy, AWS to clean, analyze and persist data. The ETL process is automated using Airflow. 
+One of the best things about Amazon is the ability to download personal order reports in CSV format. In this project, I provide insight into my Amazon order history spanning 2008 to 2019, inclusive. I use python, pandas, matplotlib, SQLAlchemy and AWS to clean, analyze and persist data. The ETL process is automated using Airflow. 
 
 ![python_logo](img/python_logo.png)![pandas_logo](img/pandas_logo.png)![matplotlib_logo](img/matplotlib_logo.png)![sqlalchemy_logo](img/sqlalchemy_logo.png)![aws_logo.png](img/aws_logo.png)![airflow_logo](img/airflow_logo.png)
 

@@ -4,7 +4,7 @@ One of the best things about Amazon is the ability to download personal order re
 
 ![python_logo](img/python_logo.png)![pandas_logo](img/pandas_logo.png)![matplotlib_logo](img/matplotlib_logo.png)![sqlalchemy_logo](img/sqlalchemy_logo.png)![aws_logo.png](img/aws_logo.png)![airflow_logo](img/airflow_logo.png)
 
-This repository includes an [Airflow dag](amazon_aws.py) that contains ETL code to obtain the [order history csv](amazon_purchases.csv) from an AWS S3 bucket and to clean, transform and persist the final dataframe into [another csv](amazon_purchases_2.csv). The final dataframe in this latter csv is loaded into a PostgreSQL database instance on AWS RDS. The Airflow dag also uses the code stored in a [Jupyter Notebook](AmazonOrderHistoryAirflowAWS_input.ipynb) to load data from PostgreSQL, perform analysis and generate the visualizations below. The analysis and visualizations are stored in a completed [Jupyter Notebook](AmazonOrderHistoryAirflowAWS_output.ipynb).
+This repository includes an [Airflow DAG](amazon_aws.py) that contains ETL code to obtain the [order history csv](amazon_purchases.csv) from an AWS S3 bucket and to clean, transform and persist the final dataframe into [another csv](amazon_purchases_2.csv). The final dataframe in this latter csv is loaded into a PostgreSQL database instance on AWS RDS. The Airflow DAG also uses the code stored in a [Jupyter Notebook](AmazonOrderHistoryAirflowAWS_input.ipynb) to load data from PostgreSQL, perform analysis and generate the visualizations below. The analysis and visualizations are stored in a completed [Jupyter Notebook](AmazonOrderHistoryAirflowAWS_output.ipynb).
 
 ![pipeline](img/pipeline.png)
 

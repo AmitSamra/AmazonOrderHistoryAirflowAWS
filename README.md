@@ -82,7 +82,7 @@ However, orders with the highest value were shipped with either FedEx or UPS.
 
 # 3. SQL
 
-One of the best things about Python is that we can actually source our data directly from SQL. The following shows a dataframe that I both created and sourced by using SQLAlchemy. 
+Pandas allows us to read data directly from SQL using SQLAlchemy. 
 
 ![SQL_dataframe](img/SQL_dataframe.png)
 

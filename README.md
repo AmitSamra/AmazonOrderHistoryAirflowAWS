@@ -1,4 +1,4 @@
-![amazon_logo_2](img/amazon_logo_2.png)
+![amazon_logo](img/amazon_logo.png)
 
 One of the best things about Amazon is the ability to download personal order reports in CSV format. In this project, I provide insight into my Amazon order history spanning 2008 to 2019, inclusive. I use python, pandas, matplotlib, SQLAlchemy and AWS to clean, analyze and persist data. The ETL process is automated using Airflow. 
 

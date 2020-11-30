@@ -13,6 +13,7 @@ This repository includes an [Airflow DAG](amazon_aws.py) that contains ETL code 
 1. [Data Processing](https://github.com/AmitSamra/AmazonOrderHistoryAirflowAWS#1-data-processing)
 2. [Data Analysis](https://github.com/AmitSamra/AmazonOrderHistoryAirflowAWS#2-data-analysis)
 3. [SQL](https://github.com/AmitSamra/AmazonOrderHistoryAirflowAWS#3-sql)
+4. [SQL](https://github.com/AmitSamra/AmazonOrderHistoryAirflowAWS#4-ec2)
 
 # 1. Data Processing
 
@@ -91,6 +92,13 @@ Pandas allows us to read data directly from SQL using SQLAlchemy.
 SQLAlchemy can be used to directly query data from a SQL database. The queries can then be utilized inside Python. 
 
 ![SQL_PurchasesByYear](img/SQL_PurchasesByYear.png)
+
+# 4. EC2
+
+Just for fun, I made this project run entirely on an [EC2 instance](https://github.com/AmitSamra/AmazonOrderHistoryAirflowEC2). 
+
+The [dag file](https://github.com/AmitSamra/AmazonOrderHistoryAirflowEC2/blob/master/amazon_ec2.py) contains an additional task that loads the [completed Jupyter Notebook](https://amazon-ec2.s3.amazonaws.com/AmazonOrderHistoryAirflowAWS_EC2_output.ipynb) to a bucket hosted on AWS S3. 
+
 
 This concludes my presentation. Thank you! 
 

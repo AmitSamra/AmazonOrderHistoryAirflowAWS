@@ -95,9 +95,11 @@ SQLAlchemy can be used to directly query data from a SQL database. The queries c
 
 # 4. EC2
 
-Just for fun, I made this project run entirely on an [EC2 instance](https://github.com/AmitSamra/AmazonOrderHistoryAirflowEC2). 
+Just for fun, I made this project run entirely on the cloud. 
 
-The [dag file](https://github.com/AmitSamra/AmazonOrderHistoryAirflowEC2/blob/master/amazon_ec2.py) contains an additional task that loads the [completed Jupyter Notebook](https://amazon-ec2.s3.amazonaws.com/AmazonOrderHistoryAirflowAWS_EC2_output.ipynb) to a bucket hosted on AWS S3. 
+![pipeline_ec2.png](pipeline_ec2.png)
+
+[This repository](https://github.com/AmitSamra/AmazonOrderHistoryAirflowEC2) includes a [dag file](https://github.com/AmitSamra/AmazonOrderHistoryAirflowEC2/blob/master/amazon_ec2.py) on an AWS EC2 instance. The dag contains an additional task that loads the [completed Jupyter Notebook](https://amazon-ec2.s3.amazonaws.com/AmazonOrderHistoryAirflowAWS_EC2_output.ipynb) to a bucket hosted on AWS S3. The entire pipeline is automated via Airflow. 
 
 
 This concludes my presentation. Thank you! 

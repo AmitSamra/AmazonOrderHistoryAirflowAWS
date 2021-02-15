@@ -69,7 +69,7 @@ Almost 60% of my transactions were with Amazon as the seller.
 
 ![TransactionsBySeller](img/TransactionsBySeller.png)
 
-But Amazon accounted for 75% of my purchase spend. Perhaps it's the generous returns policy for goods sold directly by Amazon. 
+But Amazon accounted for about 75% of my purchase spend. Perhaps it's the generous returns policy for goods sold directly by Amazon. 
 
 ![PurchasesBySeller](img/PurchasesBySeller.png)
 
